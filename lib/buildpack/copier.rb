@@ -22,8 +22,11 @@ module AspNetCoreBuildpack
     def cp(from, to, out)
       before = files_in_dest(to)
       FileUtils.mkdir_p(to)
-      # FileUtils.cp_r(from, to, remove_destination: true)
-      _, s = Open3.capture2('cp', '-rs', '--remove_destination', from, to)
+      args = ['-R']
+      if RUBY_PLATFORM.match /linux/
+        args += ['-l', '--remove_destination']
+      end
+      _, s = Open3.capture2('cp', *args, from, to)
       raise "Could not copy from #{from} to #{to}" unless s.success?
       after = files_in_dest(to)
 
