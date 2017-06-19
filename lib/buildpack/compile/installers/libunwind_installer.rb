@@ -29,9 +29,11 @@ module AspNetCoreBuildpack
       CACHE_DIR
     end
 
-    def initialize(build_dir, bp_cache_dir, manifest_file, shell)
+    def initialize(build_dir, bp_cache_dir, deps_dir, deps_idx, manifest_file, shell)
       @bp_cache_dir = bp_cache_dir
       @build_dir = build_dir
+      @deps_dir = deps_dir
+      @deps_idx = deps_idx
       @manifest_file = manifest_file
       @shell = shell
     end
@@ -44,7 +46,7 @@ module AspNetCoreBuildpack
     end
 
     def install(out)
-      dest_dir = File.join(@build_dir, CACHE_DIR)
+      dest_dir = File.join(@deps_dir, @deps_idx, CACHE_DIR)
 
       out.print("libunwind version: #{version}")
       @shell.exec("#{buildpack_root}/compile-extensions/bin/download_dependency #{dependency_name} /tmp", out)

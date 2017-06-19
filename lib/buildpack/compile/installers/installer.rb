@@ -57,7 +57,7 @@ module AspNetCoreBuildpack
     end
 
     def version_file
-      File.join(@build_dir, cache_dir, VERSION_FILE) unless cache_dir.nil? || @build_dir.nil?
+      File.join(@deps_dir, @deps_idx, cache_dir, VERSION_FILE) unless cache_dir.nil? || @build_dir.nil?
     end
 
     protected
@@ -78,6 +78,8 @@ module AspNetCoreBuildpack
     end
 
     attr_reader :build_dir
+    attr_reader :deps_dir
+    attr_reader :deps_idx
     attr_reader :bp_cache_dir
     attr_reader :shell
   end

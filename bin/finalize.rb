@@ -1,7 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env ruby
 # Encoding: utf-8
 # ASP.NET Core Buildpack
-# Copyright 2017 the original author or authors.
+# Copyright 2014-2016 the original author or authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,16 +15,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#!/bin/bash
-set -euo pipefail
-
-BUILD_DIR=$1
-CACHE_DIR=$2
-export BUILDPACK_DIR=`dirname $(readlink -f ${BASH_SOURCE%/*})`
-export DEPS_DIR="$BUILD_DIR/.cloudfoundry"
-mkdir -p "$DEPS_DIR/0"
-mkdir -p "$BUILD_DIR/.profile.d"
-echo "export DEPS_DIR=\$HOME/.cloudfoundry" > "$BUILD_DIR/.profile.d/0000_set-deps-dir.sh"
-
-$BUILDPACK_DIR/bin/supply "$BUILD_DIR" "$CACHE_DIR" "$DEPS_DIR" 0
-$BUILDPACK_DIR/bin/finalize "$BUILD_DIR" "$CACHE_DIR" "$DEPS_DIR" 0
+exit 0

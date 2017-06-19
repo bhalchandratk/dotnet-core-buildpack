@@ -21,6 +21,8 @@ require 'rspec'
 describe AspNetCoreBuildpack::BowerInstaller do
   let(:dir) { Dir.mktmpdir }
   let(:cache_dir) { Dir.mktmpdir }
+  let(:deps_dir) { Dir.mktmpdir }
+  let(:deps_idx) { '8' }
   let(:shell) { double(:shell, env: {}) }
   let(:out) { double(:out) }
   let(:self_contained_app_dir) { double(:self_contained_app_dir, published_project: 'project1') }
@@ -52,7 +54,7 @@ dependencies:
     FileUtils.rm_rf(manifest_dir)
   end
 
-  subject(:installer) { described_class.new(dir, cache_dir, manifest_file, shell) }
+  subject(:installer) { described_class.new(dir, cache_dir, deps_dir, deps_idx ,manifest_file, shell) }
 
   describe '#version' do
     it 'returns the default version' do

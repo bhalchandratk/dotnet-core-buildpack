@@ -23,6 +23,8 @@ require 'tempfile'
 describe AspNetCoreBuildpack::LibunwindInstaller do
   let(:dir) { Dir.mktmpdir }
   let(:cache_dir) { Dir.mktmpdir }
+  let(:deps_dir) { Dir.mktmpdir }
+  let(:deps_idx) { '66' }
   let(:shell) { AspNetCoreBuildpack::Shell.new }
   let(:out) { double(:out) }
 
@@ -42,7 +44,7 @@ doesn't matter for these tests
     FileUtils.rm_rf(manifest_dir)
   end
 
-  subject(:installer) { described_class.new(dir, cache_dir, manifest_file, shell) }
+  subject(:installer) { described_class.new(dir, cache_dir, deps_dir, deps_idx, manifest_file, shell) }
 
   describe '#version' do
     it 'has a default version' do

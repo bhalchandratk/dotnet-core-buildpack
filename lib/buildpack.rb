@@ -26,18 +26,21 @@ module AspNetCoreBuildpack
     Detecter.new.detect(build_dir)
   end
 
-  def self.compile(build_dir, cache_dir)
-    compiler(build_dir, cache_dir).compile
+  def self.compile(build_dir, cache_dir, deps_dir, deps_idx)
+    compiler(build_dir, cache_dir, deps_dir, deps_idx).compile
   end
 
-  def self.compiler(build_dir, cache_dir)
+  def self.compiler(build_dir, cache_dir, deps_dir, deps_idx)
     manifest_file = File.join(File.dirname(__FILE__), '..', 'manifest.yml')
 
     Compiler.new(
       build_dir,
       cache_dir,
+      deps_dir,
+      deps_idx,
       Copier.new,
-      AspNetCoreBuildpack::Installer.descendants.sort_by!(&:install_order).map { |b| b.new(build_dir, cache_dir, manifest_file, shell) },
+      [AspNetCoreBuildpack::LibunwindInstaller, AspNetCoreBuildpack::DotnetSdkInstaller].map { |b| b.new(build_dir, cache_dir, deps_dir, deps_idx, manifest_file, shell) },
+      #AspNetCoreBuildpack::Installer.descendants.sort_by!(&:install_order).map { |b| b.new(build_dir, cache_dir, deps_dir, deps_idx, manifest_file, shell) },
       out
     )
   end

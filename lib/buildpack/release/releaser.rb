@@ -71,7 +71,7 @@ EOT
 
     def get_binary_path(installers)
       bin_paths = installers.map do |subclass|
-        subclass.new(@build_dir, @cache_dir, manifest_file, @shell).path
+        subclass.new(@build_dir, @cache_dir, manifest_file, '', '', @shell).path
       end
       bin_paths.insert(0, '$PATH')
       bin_paths.compact.join(':')
@@ -79,7 +79,7 @@ EOT
 
     def get_library_path(installers)
       library_paths = installers.map do |subclass|
-        subclass.new(@build_dir, @cache_dir, manifest_file, @shell).library_path
+        subclass.new(@build_dir, @cache_dir, manifest_file, @deps_dir, @deps_idx, @shell).library_path
       end
       library_paths.insert(0, '$LD_LIBRARY_PATH')
       library_paths.insert(1, '$HOME/ld_library_path')

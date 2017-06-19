@@ -21,6 +21,8 @@ require 'rspec'
 describe AspNetCoreBuildpack::DotnetSdkInstaller do
   let(:dir) { Dir.mktmpdir }
   let(:cache_dir) { Dir.mktmpdir }
+  let(:deps_dir) { Dir.mktmpdir }
+  let(:deps_idx) { '10' }
   let(:shell) { double(:shell, env: {}) }
   let(:out) { double(:out) }
   let(:self_contained_app_dir) { double(:self_contained_app_dir, published_project: 'project1') }
@@ -44,7 +46,7 @@ doesn't matter for these tests
     FileUtils.rm_rf(dir)
   end
 
-  subject(:installer) { described_class.new(dir, cache_dir, manifest_file, shell) }
+  subject(:installer) { described_class.new(dir, cache_dir, deps_dir, deps_idx, manifest_file, shell) }
 
   describe '#version' do
     it 'is always defined' do
@@ -140,12 +142,12 @@ doesn't matter for these tests
 
   describe '#write_version_file' do
     before do
-      FileUtils.mkdir_p(File.join(dir, '.dotnet'))
+      FileUtils.mkdir_p(File.join(deps_dir, deps_idx, '.dotnet'))
     end
 
     it 'writes a version file with the current .NET version' do
       subject.send(:write_version_file, '1.0.0')
-      expect(File.exist?(File.join(dir, '.dotnet', 'VERSION'))).to be_truthy
+      expect(File.exist?(File.join(deps_dir, deps_idx, '.dotnet', 'VERSION'))).to be_truthy
     end
   end
 end

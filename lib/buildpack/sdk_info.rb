@@ -1,7 +1,7 @@
 module AspNetCoreBuildpack
   module SdkInfo
     def installed_sdk_version(build_dir)
-      version_file = DotnetSdkInstaller.new(build_dir, '', '', '').version_file
+      version_file = DotnetSdkInstaller.new(build_dir, '', '','', '', '').version_file
 
       return nil unless File.exist? version_file
       File.read(version_file).strip

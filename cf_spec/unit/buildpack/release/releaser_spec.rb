@@ -24,6 +24,8 @@ require 'fileutils'
 describe AspNetCoreBuildpack::Releaser do
   let(:build_dir)           { Dir.mktmpdir }
   let(:cache_dir)           { Dir.mktmpdir }
+  let(:deps_dir)           { Dir.mktmpdir }
+  let(:deps_idx)           { '44' }
   let(:out)                 { AspNetCoreBuildpack::Out.new }
   let(:is_sdk_project_json) { 'override' }
   let(:is_sdk_msbuild)      { 'override' }
@@ -38,7 +40,7 @@ doesn't matter for these tests
 
   before do
     File.write(manifest_file, manifest_contents)
-    FileUtils.mkdir_p(File.join(build_dir, AspNetCoreBuildpack::DotnetSdkInstaller.new(build_dir, cache_dir, manifest_file, out).cache_dir))
+    FileUtils.mkdir_p(File.join(build_dir, AspNetCoreBuildpack::DotnetSdkInstaller.new(build_dir, cache_dir, deps_dir, deps_idx, manifest_file, out).cache_dir))
     allow(subject).to receive(:msbuild?).and_return(is_sdk_msbuild)
     allow(subject).to receive(:project_json?).and_return(is_sdk_project_json)
     allow_any_instance_of(AspNetCoreBuildpack::AppDir).to receive(:msbuild?).and_return(is_sdk_msbuild)

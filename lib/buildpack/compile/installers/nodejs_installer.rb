@@ -35,8 +35,10 @@ module AspNetCoreBuildpack
       CACHE_DIR
     end
 
-    def initialize(build_dir, bp_cache_dir, manifest_file, shell)
+    def initialize(build_dir, bp_cache_dir, deps_dir, deps_idx, manifest_file, shell)
       @build_dir = build_dir
+      @deps_dir = deps_dir
+      @deps_idx = deps_idx
       @bp_cache_dir = bp_cache_dir
       @scripts_parser = ScriptsParser.new(build_dir)
       @manifest_file = manifest_file
