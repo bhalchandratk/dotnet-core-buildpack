@@ -53,7 +53,7 @@ if deps_dir
   # end
 end
 
-if AspNetCoreBuildpack.compile(build_dir, cache_dir, deps_dir, deps_dir)
+if AspNetCoreBuildpack.compile(build_dir, cache_dir, deps_dir, deps_idx)
   system("#{buildpack_dir}/compile-extensions/bin/store_buildpack_metadata #{buildpack_dir} #{cache_dir}")
   exit 0
 else

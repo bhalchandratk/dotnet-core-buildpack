@@ -39,7 +39,7 @@ module AspNetCoreBuildpack
       deps_dir,
       deps_idx,
       Copier.new,
-      [AspNetCoreBuildpack::LibunwindInstaller, AspNetCoreBuildpack::DotnetSdkInstaller].map { |b| b.new(build_dir, cache_dir, deps_dir, deps_idx, manifest_file, shell) },
+      [AspNetCoreBuildpack::LibunwindInstaller, AspNetCoreBuildpack::DotnetSdkInstaller, AspNetCoreBuildpack::NodeJsInstaller].map { |b| b.new(build_dir, cache_dir, deps_dir, deps_idx, manifest_file, shell) },
       #AspNetCoreBuildpack::Installer.descendants.sort_by!(&:install_order).map { |b| b.new(build_dir, cache_dir, deps_dir, deps_idx, manifest_file, shell) },
       out
     )

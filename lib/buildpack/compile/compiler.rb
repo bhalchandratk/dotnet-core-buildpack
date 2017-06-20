@@ -68,13 +68,13 @@ module AspNetCoreBuildpack
 
       run_installers
 
-      #step('Restoring dependencies with Dotnet CLI', @dotnet_cli.method(:restore)) if should_restore?
+      # step('Restoring dependencies with Dotnet CLI', @dotnet_cli.method(:restore)) if should_restore?
 
       # step('Installing required .NET Core runtime(s)', @dotnet_framework.method(:install)) if should_install_framework?
 
       #step('Publishing application using Dotnet CLI', @dotnet_cli.method(:publish)) if should_publish?
       step('Saving to buildpack cache', method(:save_cache))
-      step('Cleaning staging area', method(:clean_staging_area))
+      # step('Cleaning staging area', method(:clean_staging_area))
       puts "ASP.NET Core buildpack is done creating the droplet\n"
       return true
     rescue StepFailedError => e
@@ -107,7 +107,8 @@ module AspNetCoreBuildpack
 
       directories_to_remove = %w(.nuget)
 
-      # directories_to_remove.push '.dotnet' if generated_self_contained_project?
+      #TODO: move clean up to finalize
+      directories_to_remove.push '.dotnet' if generated_self_contained_project?
       directories_to_remove.push '.node' unless ENV['INSTALL_NODE'] == 'true'
 
       Dir.chdir(File.join(@deps_dir, @deps_idx)) do
@@ -144,6 +145,7 @@ module AspNetCoreBuildpack
     end
 
     def restore_cache(out)
+      puts installers
       @installers.map(&:cache_dir).compact.each do |installer_cache_dir|
         copier.cp(File.join(cache_dir, installer_cache_dir), File.join(@deps_dir, @deps_idx), out) if File.exist? File.join(cache_dir, installer_cache_dir)
       end

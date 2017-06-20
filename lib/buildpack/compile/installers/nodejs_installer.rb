@@ -50,13 +50,14 @@ module AspNetCoreBuildpack
     end
 
     def install(out)
-      dest_dir = File.join(@build_dir, CACHE_DIR)
+      dest_dir = File.join(@deps_dir, @deps_idx, CACHE_DIR)
 
       out.print("Node.js version: #{version}")
       @shell.exec("#{buildpack_root}/compile-extensions/bin/download_dependency #{dependency_name} /tmp", out)
       @shell.exec("#{buildpack_root}/compile-extensions/bin/warn_if_newer_patch #{dependency_name} #{buildpack_root}/manifest.yml", out)
       FileUtils.rm_rf(dest_dir) if File.exist?(dest_dir)
       @shell.exec("mkdir -p #{dest_dir}; tar xzf /tmp/#{dependency_name} -C #{dest_dir}", out)
+      @shell.exec("mkdir -p #{File.join(@deps_dir, @deps_idx, 'bin')}; cd #{File.join(@deps_dir, @deps_idx, 'bin')}; ln -s ../.node/node-*/bin/node ./node; ln -s ../.node/node-*/bin/npm ./npm", out)
     end
 
     def name
@@ -64,9 +65,10 @@ module AspNetCoreBuildpack
     end
 
     def path
-      "#{bin_folder}:#{node_modules_folders}" if File.exist?(File.join(@build_dir, cache_dir))
+      "#{bin_folder}:#{node_modules_folders}" if File.exist?(File.join(@deps_dir, @deps_idx, cache_dir))
     end
 
+    #TODO: check if node is already installed before installing node
     def should_install(app_dir)
       return true if ENV['INSTALL_NODE'] == 'true'
 

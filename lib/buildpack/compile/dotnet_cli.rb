@@ -70,6 +70,7 @@ module AspNetCoreBuildpack
       end
     end
 
+    #TODO: do this during supply
     def setup_shell_environment
       project_dirs = @app_dir.project_paths.map do |project|
         if msbuild?(@build_dir)
@@ -79,15 +80,14 @@ module AspNetCoreBuildpack
         end
       end
 
-      # node_modules_paths = project_dirs.map do |dir|
-      #   File.join(dir, 'node_modules', '.bin')
-      # end.compact.join(':')
+      node_modules_paths = project_dirs.map do |dir|
+        File.join(dir, 'node_modules', '.bin')
+      end.compact.join(':')
 
       #TODO: Fix these
-      @shell.env['HOME'] = @build_dir
-      @shell.env['LD_LIBRARY_PATH'] = "$LD_LIBRARY_PATH:#{File.join(@deps_dir, @deps_idx)}/libunwind/lib"
+      @shell.env['HOME'] = File.join(@deps_dir, @deps_idx)
+      @shell.env['LD_LIBRARY_PATH'] = "/#{File.join(@deps_dir, @deps_idx)}/libunwind/lib"
       @shell.env['PATH'] = "$PATH:#{@installers.map(&:path).compact.join(':')}"
-      #@shell.env['PATH'] = "$PATH:#{@installers.map(&:path).compact.join(':')}:#{node_modules_paths}"
     end
   end
 end
